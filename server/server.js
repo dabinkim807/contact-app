@@ -4,11 +4,11 @@ require('dotenv').config();
 const path = require('path');
 const db = require('./db/db-connection.js');
 
-
 const app = express();
 const PORT = process.env.PORT || 8081;
 app.use(cors());
 app.use(express.json());
+
 
 app.get('/', (req, res) => {
     res.json({ message: "Hello, this is Dana's template ExpressJS with React-Vite" });
