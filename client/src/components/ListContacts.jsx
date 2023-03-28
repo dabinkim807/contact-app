@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
-import Contact from "./Contact";
-// import EventsTable from "./eventsTable";
-// import AddOrEdit from "./addOrEdit";
 
-function Contacts() {
+import Contact from "./Contact";
+import Detail from "./Detail";
+
+function ListContacts() {
 	const [contacts, setContacts] = useState([]);
   const [open, setOpen] = useState(false);
+	const [display, setDisplay] = useState()
 
 	const getRequest = () => {
 		fetch("http://localhost:8081/api/contacts")
@@ -16,23 +17,27 @@ function Contacts() {
 			});
 	}
 
-	useEffect(() => {getRequest()}, []);
-
-	const handleOpen = () => {
+	const handleOpen = (contact) => {
+		setDisplay(contact);
     setOpen(true);
   }
+	
+	useEffect(() => {getRequest()}, []);
+
+
 	const handleClose = () => setOpen(false);
 
 	return (
 		<div className="contact-list">
-			<button onClick={handleOpen}>Add Contact</button>
       <ul>
         {contacts.map((contact) => {
-          return <li key={contact.id}> <Contact contact={contact} /></li>
+          return <li key={contact.id}> <Contact contact={contact} handleOpen={handleOpen} /></li>
         })}
       </ul>
+
+			<Detail open={open} onClose={handleClose} display={display} />
 		</div>
 	);
 }
 
-export default Contacts;
+export default ListContacts;
