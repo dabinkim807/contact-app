@@ -16,16 +16,26 @@ app.get('/', (req, res) => {
 
 app.get('/api/contacts', async (req, res) => {
     try {
-        const { rows: contacts } = await db.query('SELECT * FROM contacts');
+        const { rows: contacts } = await db.query('SELECT * FROM contacts ORDER BY id ASC');
         res.send(contacts);
     } catch (e) {
         return res.status(400).json({ e });
     }
 });
 
+app.get('/api/contacts/:contactID', async (req, res) => {
+    const id = parseInt(req.params.contactID);
+    try {
+        const { rows: contacts } = await db.query('SELECT * FROM contacts WHERE id = $1', [id]);
+        res.send(contacts);
+    } catch (e) {
+        return res.status(400).json(res.rows);
+    }
+});
+
 app.post('/api/contacts', async (req, res) => {
     try {
-        const result = await db.query(
+        await db.query(
             'INSERT INTO contacts(name, email, phone, notes) VALUES($1, $2, $3, $4) RETURNING *',
             [req.body.name, req.body.email, req.body.phone, req.body.notes],
         );
@@ -38,11 +48,10 @@ app.post('/api/contacts', async (req, res) => {
 app.put('/api/contacts/:contactID', async (req, res) => {
     const id = parseInt(req.params.contactID);
 	try {
-		const result = await db.query(
+		await db.query(
 			"UPDATE contacts SET name = $1, email = $2, phone = $3, notes = $4 WHERE id = $5 RETURNING *", 
 			[req.body.name, req.body.email, req.body.phone, req.body.notes, id]
 		);
-        console.log(result.rows[0]);
 	} catch(error) {
 		console.log(error);
 	}
