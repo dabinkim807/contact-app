@@ -9,7 +9,7 @@ const Contact = (props) => {
   // contact={contact} handleOpen={handleOpen} handleEditOpen={handleEditOpen} handleDelOpen={handleDelOpen} 
 
   return (
-    <Card onClick={ () => {console.log(props.contact); props.handleOpen(props.contact)} } style={{ cursor: "pointer" }}>
+    <Card onClick={ () => {props.handleOpen(props.contact)} } style={{ cursor: "pointer" }}>
       <Card.Body>
         <Avatar>{props.contact.name[0]}</Avatar>
         <Card.Title>{props.contact.name}</Card.Title>

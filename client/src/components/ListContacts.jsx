@@ -21,7 +21,6 @@ function ListContacts() {
 		.then((response) => response.json())
 		.then(contacts => {
 			setContacts(contacts); 
-			console.log('contacts fetched...', contacts);
 			});
 	}
 	
