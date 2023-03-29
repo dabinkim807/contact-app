@@ -23,16 +23,6 @@ app.get('/api/contacts', async (req, res) => {
     }
 });
 
-app.get('/api/contacts/:contactID', async (req, res) => {
-    const id = parseInt(req.params.contactID);
-    try {
-        const { rows: contacts } = await db.query("SELECT * FROM contacts WHERE id = $1", [id]);
-        res.send(contacts);
-    } catch (e) {
-        return res.status(400).json({ e });
-    }
-});
-
 app.post('/api/contacts', async (req, res) => {
     try {
         await db.query(
