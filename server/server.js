@@ -19,7 +19,7 @@ app.get('/api/contacts', async (req, res) => {
         const { rows: contacts } = await db.query('SELECT * FROM contacts ORDER BY id ASC');
         res.send(contacts);
     } catch (e) {
-        return res.status(400).json({ e });
+        return res.status(400).send(String(e));
     }
 });
 
@@ -41,7 +41,7 @@ app.post('/api/contacts', async (req, res) => {
         }
         return res.status(200).json(returnObj);
     } catch (e) {
-        return res.status(400).json({ e });
+        return res.status(400).send(String(e));
     }
 });
 
@@ -52,8 +52,9 @@ app.put('/api/contacts/:contactID', async (req, res) => {
 			"UPDATE contacts SET name = $1, email = $2, phone = $3, notes = $4 WHERE id = $5 RETURNING *", 
 			[req.body.name, req.body.email, req.body.phone, req.body.notes, id]
 		);
-	} catch(error) {
-		return res.status(400).json({ e });
+	} catch(e) {
+        console.log(e);
+		return res.status(400).send(String(e));
 	}
 	return res.end();
 });
@@ -63,7 +64,7 @@ app.delete('/api/contacts/:contactID', async (req, res) => {
 	try {
 		await db.query("DELETE FROM contacts WHERE id = $1", [id]);
 	} catch(error) {
-		return res.status(400).json({ e });
+		return res.status(400).send(String(e));
 	}
 	return res.end();
 });

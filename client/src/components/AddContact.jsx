@@ -41,19 +41,24 @@ const AddContact = (props) => {
         },
         body: JSON.stringify(newContact)
       })
-        .then((response) => response.json())
         .then((response) => {
           if (response.status === 400) {
             response.text().then(function (text) {
               alert(text);
             });
+            return null;
           } else {
+            return response.json();
+          }})
+        .then((response) => {
+          if (response !== null) {
             let n = [...props.contacts, response];
             props.setContacts(n);
             setNewContact(defaultContact);
-            props.onClose();
           }
+            props.onClose();
         });
+            
     }
     postRequest();
   }
