@@ -3,9 +3,8 @@ import Modal from '@mui/material/Modal';
 
 
 const Detail = (props) => {
-  // open={handleOpen} onClose={handleClose} contact={contacts}
+  // open={open} onClose={handleClose} display={display}
   
-
   const style = {
     position: 'absolute',
     top: '50%',
@@ -23,7 +22,7 @@ const Detail = (props) => {
     <div className="main-modal">
       <Modal open={props.open} onClose={props.onClose}>
         <Box sx={style}>     
-          <h2>Contact Detail</h2>     
+          <h2>{props.display.name}</h2>
           {/* <form>
             <label>Name</label>
             <input

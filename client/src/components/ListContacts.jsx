@@ -3,10 +3,17 @@ import { useState, useEffect } from "react";
 import Contact from "./Contact";
 import Detail from "./Detail";
 
+
 function ListContacts() {
+
 	const [contacts, setContacts] = useState([]);
   const [open, setOpen] = useState(false);
-	const [display, setDisplay] = useState()
+	const [display, setDisplay] = useState({
+		name: "",
+		email: "",
+		phone: "",
+		notes: ""
+	});
 
 	const getRequest = () => {
 		fetch("http://localhost:8081/api/contacts")
@@ -16,15 +23,13 @@ function ListContacts() {
 			console.log('contacts fetched...', contacts);
 			});
 	}
+	
+	useEffect(() => {getRequest()}, []);
 
 	const handleOpen = (contact) => {
 		setDisplay(contact);
     setOpen(true);
   }
-	
-	useEffect(() => {getRequest()}, []);
-
-
 	const handleClose = () => setOpen(false);
 
 	return (

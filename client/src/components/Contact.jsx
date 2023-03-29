@@ -5,7 +5,7 @@ import * as ioicons from 'react-icons/io5'
 
 
 const Contact = (props) => {
-  // contact={contact} setContacts={setContacts} handleOpen={handleOpen}
+  // contact={contact} handleOpen={handleOpen}
 
   // const onUpdate = (toUpdateStudent) => {
   //   toUpdate(toUpdateStudent)
@@ -17,7 +17,7 @@ const Contact = (props) => {
 
 
   return (
-    <Card onClick={ () => {console.log("click"); props.handleOpen(props.contact)} } style={{ cursor: "pointer" }}>
+    <Card onClick={ () => {console.log(props.contact);props.handleOpen(props.contact)} } style={{ cursor: "pointer" }}>
       <Card.Body>
         <Card.Title>{props.contact.name}</Card.Title>
         <Button variant="outline-danger" onClick={()=>{onDelete(student)}} style={{padding: '0.6em', marginRight:'0.9em'}}><ioicons.IoTrash/></Button>
