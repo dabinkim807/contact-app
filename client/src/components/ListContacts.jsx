@@ -4,6 +4,7 @@ import Contact from "./Contact";
 import Detail from "./Detail";
 import AddContact from "./AddContact"
 import EditContact from "./EditContact";
+import DeleteContact from "./DeleteContact";
 
 function ListContacts() {
 
@@ -40,7 +41,7 @@ function ListContacts() {
   }
 	const handleAddClose = () => setAddOpen(false);
 
-	
+
 	const [editOpen, setEditOpen] = useState(false);
   const [toEdit, setToEdit] = useState({
     id: 0
@@ -54,11 +55,25 @@ function ListContacts() {
 		setOpen(false);
 	}
 
+
+  const [delOpen, setDelOpen] = useState(false);
+	const [toDelete, setToDelete] = useState({
+    id: 0
+  });
+  const handleDelOpen = (contact) => {
+    setToDelete(contact);
+    setDelOpen(true);
+  }
+  const handleDelClose = () => {
+		setDelOpen(false);
+		setOpen(false);
+	}
+
 	return (
 		<div className="contact-list">
       <ul>
         {contacts.map((contact, i) => {
-          return <li key={i}> <Contact contact={contact} handleOpen={handleOpen} handleEditOpen={handleEditOpen} setToEdit={setToEdit} /></li>
+          return <li key={i}> <Contact contact={contact} handleOpen={handleOpen} handleEditOpen={handleEditOpen} handleDelOpen={handleDelOpen} setToEdit={setToEdit} /></li>
         })}
       </ul>
 			
@@ -66,7 +81,8 @@ function ListContacts() {
 
 			<Detail open={open} onClose={handleClose} display={display} />
 			<AddContact open={addOpen} onClose={handleAddClose} contacts={contacts} setContacts={setContacts} />
-			<EditContact open={editOpen} onClose={handleEditClose} handleEditOpen={handleEditOpen} contacts={contacts} setContacts={setContacts} setEditOpen={setEditOpen} toEdit={toEdit} setToEdit={setToEdit} />
+			<EditContact open={editOpen} onClose={handleEditClose} contacts={contacts} setContacts={setContacts} toEdit={toEdit} setToEdit={setToEdit} />
+			<DeleteContact open={delOpen} onClose={handleDelClose} contacts={contacts} setContacts={setContacts} toDelete={toDelete} setToDelete={setToDelete} />
 		</div>
 	);
 }

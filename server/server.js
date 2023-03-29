@@ -54,10 +54,10 @@ app.put('/api/contacts/:contactID', async (req, res) => {
 			[req.body.name, req.body.email, req.body.phone, req.body.notes, id]
 		);
 	} catch(error) {
-		console.log(error);
+		return res.status(400).json({ e });
 	}
 	return res.end();
-})
+});
 
 app.delete('/api/contacts/:contactID', async (req, res) => {
     const id = parseInt(req.params.contactID);

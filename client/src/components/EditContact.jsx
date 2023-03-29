@@ -4,7 +4,7 @@ import Modal from '@mui/material/Modal';
 
 
 const EditContact = (props) => {
-  // open={editOpen} onClose={handleEditClose} handleEditOpen={handleEditOpen} contacts={contacts} setContacts={setContacts} setEditOpen={setEditOpen} toEdit={toEdit} setToEdit={setToEdit}
+  // open={editOpen} onClose={handleEditClose} contacts={contacts} setContacts={setContacts} toEdit={toEdit} setToEdit={setToEdit}
 
   const handleNameChange = (e) => {
     e.preventDefault();
@@ -34,7 +34,7 @@ const EditContact = (props) => {
         body: JSON.stringify(props.toEdit)
       })
         .then((response) => {
-          if (response.status === 500) {
+          if (response.status === 400) {
             response.text().then(function (text) {
               alert(text);
             });
