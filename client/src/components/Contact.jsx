@@ -8,22 +8,17 @@ import Avatar from '@mui/material/Avatar';
 const Contact = (props) => {
   // contact={contact} handleOpen={handleOpen}
 
-  // const onUpdate = (toUpdateStudent) => {
-  //   toUpdate(toUpdateStudent)
-  // }
-
   // const onDelete = (toDeleteStudent) => {
   //   toDelete(toDeleteStudent)
   // }
 
 
   return (
-    <Card onClick={ () => {console.log(props.contact);props.handleOpen(props.contact)} } style={{ cursor: "pointer" }}>
+    <Card onClick={ () => {console.log(props.contact); props.handleOpen(props.contact)} } style={{ cursor: "pointer" }}>
       <Card.Body>
         <Avatar>{props.contact.name[0]}</Avatar>
         <Card.Title>{props.contact.name}</Card.Title>
         <Button variant="outline-danger" onClick={()=>{onDelete(student)}} style={{padding: '0.6em', marginRight:'0.9em'}}><ioicons.IoTrash/></Button>
-        <Button variant="outline-info" onClick={()=>{onUpdate(student)}} style={{padding: '0.6em'}}> <ioicons.IoSync/></Button>
       </Card.Body>
     </Card>
   )

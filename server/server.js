@@ -25,14 +25,25 @@ app.get('/api/contacts', async (req, res) => {
 
 app.post('/api/contacts', async (req, res) => {
     try {
-        await db.query(
+        if (req.body.email === "") {
+            req.body.email = null;
+        }
+        const result = await db.query(
             "INSERT INTO contacts(name, email, phone, notes) VALUES($1, $2, $3, $4) RETURNING *",
             [req.body.name, req.body.email, req.body.phone, req.body.notes],
         );
+        const returnObj = {
+            id: result.rows[0].id,
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.phone,
+            notes: req.body.notes,
+        }
+        return res.status(200).json(returnObj);
     } catch (e) {
+        console.log(e);
         return res.status(400).json({ e });
     }
-    return res.end();
 });
 
 app.put('/api/contacts/:contactID', async (req, res) => {
