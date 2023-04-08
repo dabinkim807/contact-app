@@ -4,87 +4,72 @@ require('dotenv').config();
 const path = require('path');
 const db = require('./db/db-connection.js');
 
-
 const app = express();
 const PORT = process.env.PORT || 8081;
 app.use(cors());
 app.use(express.json());
 
-// creates an endpoint for the route "/""
+
 app.get('/', (req, res) => {
-    res.json({ message: 'Hola, from My template ExpressJS with React-Vite' });
+    res.json({ message: "Hello, this is Dana's template ExpressJS with React-Vite" });
 });
 
-// create the get request for students in the endpoint '/api/students'
-app.get('/api/students', async (req, res) => {
+app.get('/api/contacts', async (req, res) => {
     try {
-        const { rows: students } = await db.query('SELECT * FROM students');
-        res.send(students);
+        const { rows: contacts } = await db.query('SELECT * FROM contacts ORDER BY id ASC');
+        res.send(contacts);
     } catch (e) {
-        return res.status(400).json({ e });
+        return res.status(400).send(String(e));
     }
 });
 
-// create the POST request
-app.post('/api/students', async (req, res) => {
+app.post('/api/contacts', async (req, res) => {
     try {
-        const newStudent = {
-            firstname: req.body.firstname,
-            lastname: req.body.lastname,
-            iscurrent: req.body.iscurrent
-        };
-        //console.log([newStudent.firstname, newStudent.lastname, newStudent.iscurrent]);
+        if (req.body.email === "") {
+            req.body.email = null;
+        }
         const result = await db.query(
-            'INSERT INTO students(firstname, lastname, is_current) VALUES($1, $2, $3) RETURNING *',
-            [newStudent.firstname, newStudent.lastname, newStudent.iscurrent],
+            "INSERT INTO contacts(name, email, phone, notes) VALUES($1, $2, $3, $4) RETURNING *",
+            [req.body.name, req.body.email, req.body.phone, req.body.notes],
         );
-        console.log(result.rows[0]);
-        res.json(result.rows[0]);
-
+        const returnObj = {
+            id: result.rows[0].id,
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.phone,
+            notes: req.body.notes,
+        }
+        return res.status(200).json(returnObj);
     } catch (e) {
-        console.log(e);
-        return res.status(400).json({ e });
-    }
-
-});
-
-// delete request for students
-app.delete('/api/students/:studentId', async (req, res) => {
-    try {
-        const studentId = req.params.studentId;
-        await db.query('DELETE FROM students WHERE id=$1', [studentId]);
-        console.log("From the delete request-url", studentId);
-        res.status(200).end();
-    } catch (e) {
-        console.log(e);
-        return res.status(400).json({ e });
-
+        return res.status(400).send(String(e));
     }
 });
 
-//A put request - Update a student 
-app.put('/api/students/:studentId', async (req, res) =>{
-    //console.log(req.params);
-    //This will be the id that I want to find in the DB - the student to be updated
-    const studentId = req.params.studentId
-    const updatedStudent = { id: req.body.id, firstname: req.body.firstname, lastname: req.body.lastname, iscurrent: req.body.is_current}
-    console.log("In the server from the url - the student id", studentId);
-    console.log("In the server, from the react - the student to be edited", updatedStudent);
-    // UPDATE students SET lastname = "something" WHERE id="16";
-    const query = `UPDATE students SET firstname=$1, lastname=$2, is_current=$3 WHERE id=${studentId} RETURNING *`;
-    const values = [updatedStudent.firstname, updatedStudent.lastname, updatedStudent.iscurrent];
-    try {
-      const updated = await db.query(query, values);
-      console.log(updated.rows[0]);
-      res.send(updated.rows[0]);
-  
-    }catch(e){
-      console.log(e);
-      return res.status(400).json({e})
-    }
-  })
+app.put('/api/contacts/:contactID', async (req, res) => {
+    const id = parseInt(req.params.contactID);
+	try {
+		await db.query(
+			"UPDATE contacts SET name = $1, email = $2, phone = $3, notes = $4 WHERE id = $5 RETURNING *", 
+			[req.body.name, req.body.email, req.body.phone, req.body.notes, id]
+		);
+	} catch(e) {
+        console.log(e);
+		return res.status(400).send(String(e));
+	}
+	return res.end();
+});
 
-// console.log that your server is up and running
+app.delete('/api/contacts/:contactID', async (req, res) => {
+    const id = parseInt(req.params.contactID);
+	try {
+		await db.query("DELETE FROM contacts WHERE id = $1", [id]);
+	} catch(error) {
+		return res.status(400).send(String(e));
+	}
+	return res.end();
+});
+
+
 app.listen(PORT, () => {
-    console.log(`Hola, Server listening on ${PORT}`);
+    console.log(`Hi! Server is listening on ${PORT}`);
 });
